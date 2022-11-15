@@ -1,0 +1,37 @@
+How could I return a function without it close the terminal.
+
+inquirer.prompt({
+        type:"rawlist",
+        name: "option",
+        message: "Take an Option",
+        
+        choices: [
+            "Clean IP",
+            "Clean DNS",
+            "Both",
+            "Back to Menu",
+            "Exit"
+        ]
+    })
+        .then(async answer => {
+            switch (answer["option"]) {
+                case "Clean IP":
+                    // releaseIp()
+                    // renewIP()
+                    return  menuScren()
+                case "Clean DNS":
+                    console.log("DNS was Cleaned");
+                    break;
+                case "Both":
+                    console.log("DNS ans IP were Cleaned");
+                    break;
+                case "Back to Menu":
+                    console.log("Menu");
+                    break;
+                case "Exit":
+                    console.log("Exit");
+                    break;
+                default:
+                    break;
+            }
+        })
