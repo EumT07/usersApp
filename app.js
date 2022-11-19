@@ -1,28 +1,29 @@
-import inquirer from "inquirer";
 import readline from "readline/promises";
 import {stdin as input, stdout as output} from "process"
-import colors from "colors"
-import fs from "fs";
-import path from "path";
-//Imports Screens
+//Imports from Screens
 import  {
     menu_screen,
     sys_Screen,
     optionScreen,
-    cleanerScreen
+    cleanerScreen,
+    dataScreen,
+    dataScreen_property,
+    dataScreen_user,
+    createScreen
 } from "./src/screens/screen.js"
-// Import Cleaners
+// Import from Cleaners
 import {releaseIp, renewIP, displayDNS, flushingDNS} from "./src/sys/cleaners.js"
 import util from "util"
 const sleep = util.promisify(setTimeout);
-
+import {createConnectionLownDb} from "./src/database/database.js"
+import {createUser} from "./src/controllers/users.ctrl.js"
 
 
 //Creating interface screen
 let cmdShell = readline.createInterface(input , output);
 
 menuScren()
-
+createConnectionLownDb()
 async function menuScren(){
     console.clear()
     const answer = await cmdShell.question(menu_screen);
@@ -31,7 +32,7 @@ async function menuScren(){
             getSysInfo();
             break;
         case "2":
-            console.log("You chose option 2 ");
+            contacts();
             break;
         case "3":
             clean();
@@ -40,9 +41,11 @@ async function menuScren(){
             cmdShell.close();
             break;
         default:
-            console.log("Err");
-            await sleep(1000)
-            menuScren()
+            console.clear();
+            console.log("There is an err, try again");
+            await sleep(1000);
+            menuScren();
+            break;
     }
 }
 
@@ -57,15 +60,15 @@ async function menuOptions(){
                 cmdShell.close();
                 break;
             default:
+                console.clear();
                 console.log("There is an err, try again");
-                await sleep(1000)
+                await sleep(1000);
                 getSysInfo();
                 break;
         }
     });
     
 }
-
 
 //Sys_Screen
 function getSysInfo(){
@@ -113,9 +116,34 @@ async function clean(){
                 break;
             default:
                 console.log("There was An error, try again");
+                await sleep(2000);
                 clean();
                 break;
         }
     })
   
+}
+
+//Contacts
+async function contacts(){
+    console.clear()
+    const data = await cmdShell.question(dataScreen);
+    switch (data.trim()) {
+        case "1":
+            console.clear();
+            console.log(createScreen);
+            createUser();
+            // await sleep(1000);
+            // contacts();
+            break;
+        case "2":
+            console.log("Lista Usuario");
+            break;
+        default:
+            console.clear();
+            console.log("There is an err, try again");
+            await sleep(1000);
+            contacts()
+            break;
+    }
 }
