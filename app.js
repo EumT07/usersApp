@@ -9,15 +9,15 @@ import  {
     dataScreen,
     dataScreen_property,
     dataScreen_user,
-    createScreen
+    createScreen,
+    clientListScreen
 } from "./src/screens/screen.js"
 // Import from Cleaners
 import {releaseIp, renewIP, displayDNS, flushingDNS} from "./src/sys/cleaners.js"
 import util from "util"
-const sleep = util.promisify(setTimeout);
 import {createConnectionLownDb} from "./src/database/database.js"
-import {createUser} from "./src/controllers/users.ctrl.js"
-
+import {createUser, getUsers} from "./src/controllers/users.ctrl.js"
+const sleep = util.promisify(setTimeout);
 
 //Creating interface screen
 let cmdShell = readline.createInterface(input , output);
@@ -49,9 +49,12 @@ async function menuScren(){
     }
 }
 
-//Menu options
-async function menuOptions(){
-    const getLineEvent = await cmdShell.on("line", async (line) =>{
+//Sys_Screen
+async function getSysInfo(){
+    console.clear()
+    console.log(optionScreen);
+    console.log(sys_Screen);
+    await cmdShell.on("line", async (line) =>{
         switch (line.trim()) {
             case ":back":
                 menuScren(); 
@@ -67,15 +70,6 @@ async function menuOptions(){
                 break;
         }
     });
-    
-}
-
-//Sys_Screen
-function getSysInfo(){
-    console.clear()
-    console.log(optionScreen);
-    console.log(sys_Screen);
-    menuOptions()
 }
 
 //Cleaner
@@ -124,20 +118,24 @@ async function clean(){
   
 }
 
-//Contacts
+// Contacts
 async function contacts(){
     console.clear()
+    console.log(optionScreen);
     const data = await cmdShell.question(dataScreen);
     switch (data.trim()) {
         case "1":
             console.clear();
-            console.log(createScreen);
-            createUser();
-            // await sleep(1000);
-            // contacts();
+            getUserInfo()
             break;
         case "2":
-            console.log("Lista Usuario");
+            getUserList();
+            break;
+        case ":back":
+            menuScren(); 
+            break;
+        case ":exit":
+            cmdShell.close();
             break;
         default:
             console.clear();
@@ -146,4 +144,47 @@ async function contacts(){
             contacts()
             break;
     }
+}
+
+//Getting data from clients and creating users
+async function getUserInfo(){
+    console.log(createScreen);
+    const questions = [
+        "Name: ",
+        "Last Name: ",
+        "Email: "
+    ];
+    const answers = [];
+    let data = null;
+    for(let i = 0; i < questions.length; i++){
+        data = await cmdShell.question(questions[i]);
+        answers.push(data);
+    }
+    createUser(answers);
+    await sleep(1000);
+    contacts(); 
+}
+//Show clients
+async function getUserList(){
+    console.clear()
+    console.log(clientListScreen);
+    console.log(dataScreen_user);
+    getUsers();
+    const data = await cmdShell.on("line", async (data)=>{
+        switch (data.trim()) {
+            case ":back":
+                contacts()
+                break;
+            case ":exit":
+                cmdShell.close();
+                break;
+            default:
+                console.clear();
+                console.log("There is an err, try again");
+                await sleep(1000);
+                getUserList();
+                break;
+        }
+    });
+    
 }

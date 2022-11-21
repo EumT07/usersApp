@@ -73,10 +73,12 @@ const dataScreen = `
 const dataScreen_user = `
 ================CMD============================= 
  User {sh: search |:ed = editar | :dl = delete }
-================================================`
+        :back = Menu | :exit = Salir
+================================================>
+`
 const dataScreen_property = `
 ================CMD============================= 
-     add: New |:ed = editar | :dl = delete 
+Property {add: New |:ed = editar | :dl = delete} 
 ================================================`
 
 //Creatin user
@@ -86,6 +88,10 @@ const createScreen = `
            Creating User
         ===================\n
 `
+const clientListScreen = `
+        ===================
+               Users
+        ===================`
 
 //Export Area
 export { 
@@ -96,6 +102,7 @@ export {
     dataScreen,
     dataScreen_user,
     dataScreen_property,
-    createScreen 
+    createScreen,
+    clientListScreen 
 }
 

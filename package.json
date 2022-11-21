@@ -15,6 +15,7 @@
     "iconv-lite": "^0.6.3",
     "inquirer": "^9.1.4",
     "lowdb": "^4.0.1",
+    "uuid-random": "^1.3.2",
     "uuidv4": "^6.2.13"
   }
 }

@@ -1,31 +1,26 @@
-import readline from "readline/promises";
-import {stdin as input, stdout as output} from "node:process"
 import { getConnection } from "../database/database.js"
 import User from "../models/user.js"
-import id_v4 from "uuidv4"
-//Creat all functions about users
-let cmdQuestions = readline.createInterface(input , output);
 
-const questions = [
-    "Name: ",
-    "Last Name: ",
-    "Email: "
-]
-const answers = [];
+//Read user's List
 
-async function getUserInfo(){
-    let data = null;
-    for(let i = 0; i < questions.length; i++){
-        data = await cmdQuestions.question(questions[i]);
-        answers.push(data);
-    } 
+const getUsers = async () =>{
+    const users = await getConnection().data.Users;
+    let result = [];
+    for (let i = 0; i < users.length; i++) {
+        result.push({
+            id : users[i]["id"].substring(0,7),
+            name : users[i]["name"],
+            email : users[i]["email"],
+            status : users[i]["status"],
+        });
+        
+    }
+    console.table(result);
 }
 
-let newUser =null;
-const createUser = async () => {
-    await getUserInfo();
-    newUser = new User(answers[0],answers[1],answers[2])
-    console.table(newUser);
+//Creat
+const createUser = async (answers) => {
+    const newUser = new User(answers[0],answers[1],answers[2])
     try{
         const db = getConnection();
         db.data.Users.push(newUser);
@@ -34,7 +29,10 @@ const createUser = async () => {
         console.log(err);
     }
 }
-
+//Search
+//Edit or Update
+//Delete
 export {
-    createUser
+    createUser,
+    getUsers
 }
