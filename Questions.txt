@@ -35,3 +35,34 @@ inquirer.prompt({
                     break;
             }
         })
+
+
+
+
+ switch (data.trim()) {
+            case "1":
+                console.clear();
+                await sleep(2000);
+                change_name();
+                cmdShell.close();
+                break;
+            case "2":
+                console.log("Has Elgido 3");
+                break;
+            case "3":
+                console.log("Has Elgido 3");
+                break;
+            case ":back":
+                menuScren()
+                break;
+            case ":exit":
+                cmdShell.close();
+                break;
+            // default:
+            //     console.log("There is an err, try again");
+            //     await sleep(2000);
+            //     console.clear();
+            //     // getUserList();
+            //     break;
+        }
+

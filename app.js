@@ -4,35 +4,35 @@ import {stdin as input, stdout as output} from "process"
 import  {
     menu_screen,
     optionScreen,
-    dataScreen_user,
-    dataScreen_property,
+    dataScreen_properties,
     createScreen,
-    clientListScreen,
-    searchUser_Screen
+    searchUser_Screen,
+    new_Name,
+    new_lastName,
+    new_email
 } from "./src/screens/screen.js"
-// Import from Cleaners
 import util from "util"
 import {createConnectionLownDb} from "./src/database/database.js"
-import {createUser, deleteUser, getUsers, searchUser,updateUser} from "./src/controllers/users.ctrl.js"
+import {createUser, deleteUser, getUsers, searchUser,updateUser}from "./src/controllers/users.ctrl.js";
+import { loadingData_message, searchingData_message, errorMessage } from "./src/messages/msg.js";
 import events from "node:events";
 
 const sleep = util.promisify(setTimeout);
-
 events.defaultMaxListeners = 20
 
 //Creating interface screen
 let cmdShell = readline.createInterface(input , output);
 
-menuScren()
-createConnectionLownDb()
+menuScren();
+createConnectionLownDb();
 async function menuScren(){
-    await sleep(1000)
-    console.clear()
+    await sleep(1000);
+    console.clear();
     const answer = await cmdShell.question(menu_screen);
     switch (answer.trim()) {
         case "1":
             console.clear();
-            getUserInfo()
+            getUserInfo();
             break;
         case "2":
             console.clear();
@@ -43,47 +43,23 @@ async function menuScren(){
             break;
         default:
             console.clear();
-            console.log("There is an err, try again");
+            console.log(errorMessage);
             await sleep(1000);
             menuScren();
             break;
     }
 }
 
-//Meesages Folder
-async function loadingData_message(){
-    await sleep(1000);
-    console.clear();
-    console.log("Loading.");
-    await sleep(1100);
-    console.clear();
-    console.log("Loading..");
-    await sleep(1200);
-    console.clear();
-    console.log("Loading...")
-    await sleep(1400);
-    console.clear();
-}
-async function searchingData_message(userID){
-    await sleep(1200);
-    console.log(`Wait few seconds we are looking for user with "${userID}" ID`);
-    await sleep(1500);
-    console.clear()
-    loadingData_message();
-    await sleep(5000);
-    console.clear()
-    console.log(`We almost finish...`);
-    await sleep(1000);
-    console.clear()
-}
-
 //Getting data from clients and creating users
+//* insert message info
 async function getUserInfo(){
+    await sleep(1000);
     console.log(createScreen);
     const questions = [
-        "Name: ",
-        "Last Name: ",
-        "Email: "
+        "Name _> : ".green.bold,
+        "Last Name _> : ".green.bold,
+        "Email _> : ".green.bold,
+        "Phone : ".green.bold
     ];
     const answers = [];
     let data = null;
@@ -91,149 +67,142 @@ async function getUserInfo(){
         data = await cmdShell.question(questions[i]);
         answers.push(data);
     }
+    loadingData_message();
+    await sleep(5000);
     createUser(answers);
     await sleep(1000);
     menuScren(); 
 }
-//Show clients
+//Show Users
 async function getUserList(){
-    console.clear()
+    console.clear();
     console.log(optionScreen);
-    console.log(dataScreen_user);
-    await sleep(1500)
+    await sleep(1500);
     getUsers();
-    const data = await cmdShell.on("line", async (data)=>{
-        switch (data.trim()) {
-            case ":sh":
-                searching();
-                break;
-            case ":ed":
-                editingUser();
-                break;
-            case ":dl":
-                deletingUser();
-                break;
-            case ":back":
-                menuScren()
-                break;
-            case ":exit":
-                cmdShell.close();
-                break;
-            default:
-                console.clear();
-                console.log("There is an err, try again");
-                await sleep(1000);
-                getUserList();
-                break;
-        }
-    });
+    await sleep(1600);
+    const data = await cmdShell.question("_> ".blue.bold);
+    switch (data.trim()) {
+        case ":sh":
+            searching();
+            break;
+        case ":back":
+            menuScren();
+            break;
+        case ":exit":
+            cmdShell.close();
+            break;
+        default:
+            console.clear();
+            console.log(errorMessage);
+            await sleep(1000);
+            menuScren();
+            break;
+    }
     
 }
-
-
-
 //Searching User by ID
-
 async function searching(){
     loadingData_message();
     await sleep(5800);
     console.clear();
     console.log(searchUser_Screen);
-    await sleep(1000);
-    getUsers();
-    await sleep(1800);
-    const userID = await  cmdShell.question("Seach By ID _> ")
-    console.clear()
-    searchingData_message(userID);
-    await sleep(12000);
-    searchUser(userID)
-    console.log(optionScreen)
-    await cmdShell.on("line", async (data)=>{
-        switch (data.trim()) {
-            case ":back":
-                menuScren()
-                break;
-            case ":exit":
-                cmdShell.close();
-                break;
-            default:
-                console.clear();
-                console.log("There is an err, try again");
-                await sleep(500);
-                getUserList();
-                break;
-        }
-    })
-}
-
-async function editingUser(){
-    console.clear();
-    loadingData_message();
-    await sleep(6000);
-    console.clear();
-    console.log(searchUser_Screen);
-    await sleep(1200);
-    getUsers();
-    await sleep(1800);
-    const userID = await  cmdShell.question("Choose one By ID _> ")
-    console.clear()
-    searchingData_message(userID);
-    await sleep(12000);
-    searchUser(userID)
-    // updateUser(userID)
-    console.log(dataScreen_property)
-    await cmdShell.on("line", async (data)=>{
-        switch (data.trim()) {
-            case "1":
-                console.clear();
-                change_name();
-                break;
-            case "2":
-                console.log("Has Elgido 3");
-                break;
-            case "3":
-                console.log("Has Elgido 3");
-                break;
-            case ":back":
-                menuScren()
-                break;
-            case ":exit":
-                cmdShell.close();
-                break;
-            default:
-                console.log("There is an err, try again");
-                await sleep(1000);
-                console.clear();
-                getUserList();
-                break;
-        }
-    })
-}
-
-//Changing name
-async function change_name(){
-    //Take a new name
-    //replace the old name by new name
-    // Save new data into db
-    // editing 
-    console.log("Changing name");
-}
-
-async function deletingUser(){
-    await sleep(1300)
-    console.clear();
-    loadingData_message();
-    await sleep(5800);
-    console.clear();
-    console.log(searchUser_Screen);
-    await sleep(1000);
     getUsers();
     await sleep(2000);
-    const userID = await  cmdShell.question("Delete By ID _> ")
-    console.clear()
+    const userID = await  cmdShell.question("Seach User By ID _> ".blue.bold);
+    console.clear();
     searchingData_message(userID);
-    await sleep(14000);
+    await sleep(12000);
+    console.clear();
+    edit_settings(userID);
+}
+//Settings
+async function edit_settings(userID){
+    searchUser(userID);
+    console.log(dataScreen_properties);
+    await sleep(2000);
+    const answer = await cmdShell.question("_>  ".blue.bold)
+    switch (answer.trim()) {
+        case "1":
+            console.clear();
+            await sleep(1000);
+            change_name(userID);
+            break;
+        case "2":
+            console.clear();
+            await sleep(1000);
+            change_lastName(userID);
+            break;
+        case "3":
+            console.clear();
+            await sleep(1000);
+            change_email(userID);
+            break;
+        case "4":
+            console.clear();
+            await sleep(1000);
+            return deletingUser(userID);
+        case ":back":
+            console.clear();
+            return menuScren();
+        case ":exit":
+            cmdShell.close();
+            break;
+        default:
+            console.clear();
+            console.log(errorMessage);
+            await sleep(1000);
+            menuScren();
+            break;
+    }
+}
+//Changing name
+async function change_name(userID){
+    console.log(new_Name);
+    //Take a new name
+    await sleep(1000);
+    const answer = await cmdShell.question("Insert the new Name _> : ".blue.bold);
+    const newName = answer.trim().toLowerCase();
+    //Property to change
+    const property = "name";
+    //replace the old name by new name
+    updateUser(userID,property,newName);
+    console.clear();
+    await sleep(1000);
+    return edit_settings(userID);
+}
+//Changing lastName
+async function change_lastName(userID){
+    console.log(new_lastName);
+    //Take a new name
+    const answer = await cmdShell.question("Insert the new Lastname _> : ".blue.bold);
+    const newLastName = answer.trim().toLowerCase();
+    //Property to change
+    const property = "lastName";
+    //replace the old name by new name
+    updateUser(userID,property,newLastName);
+    await sleep(1000);
+    console.clear();
+    return edit_settings(userID);
+}
+//Changing email
+async function change_email(userID){
+    console.log(new_email);
+    //Take a new name
+    const answer = await cmdShell.question("Insert the new email _> : ".blue.bold);
+    const newEmail = answer.trim().toLowerCase();
+    //Property to change
+    const property = "email";
+    //replace the old name by new name
+    updateUser(userID,property,newEmail);
+    console.clear();
+    await sleep(1000);
+    return edit_settings(userID);
+}
+
+async function deletingUser(userID){
+    loadingData_message();
+    await sleep(5800);
     deleteUser(userID);
-    await sleep(1000)
-    getUserList();
+    await sleep(1000);
+    return menuScren();
 }

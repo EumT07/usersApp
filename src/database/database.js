@@ -1,3 +1,4 @@
+"use strict"
 import {join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {Low , JSONFile} from "lowdb";
