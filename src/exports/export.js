@@ -21,7 +21,7 @@ async function createFolder(){
         let content = "Accounts :\n";
         for (let i = 0; i < users.length; i++) {
             content += `
-            ================== ${i + 1} ==================
+            =================== ${i + 1} ===================
                 Name: ${users[i]["name"]}
                 LastName: ${users[i]["lastName"]}
                 Email: ${users[i]["email"]}
@@ -34,20 +34,19 @@ async function createFolder(){
             //Deleting file in order to rewrite the new info on it
             fs.unlinkSync(`${desktopRoot}/${folder}/${file}`);
             //Adding a new info
-            fs.appendFileSync(`${desktopRoot}/${folder}/${file}`,   content);
+            fs.appendFileSync(`${desktopRoot}/${folder}/${file}`, content);
             console.log("The folder was Updated".green.bold);
         }else{
             //Creating Folder
             fs.mkdirSync(`${desktopRoot}/${folder}`);
             //Creat file with users info
-            fs.writeFileSync(`${desktopRoot}/${folder}/${file}`,    content);
+            fs.writeFileSync(`${desktopRoot}/${folder}/${file}`, content);
             console.log("The folder was Created successfully".green.bold);
         }
     } catch (error) {
         console.error(error)
     }
 }
-
 export {
     createFolder
 }

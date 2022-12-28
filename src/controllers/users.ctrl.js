@@ -25,7 +25,6 @@ const getUsers = async () =>{
         console.error(error);
     }
 }
-
 //Creating a New user
 const createUser = async (answers) => {
     const newUser = new User(answers[0],answers[1],answers[2],answers[3])
@@ -58,7 +57,7 @@ const searchUser = async (userID) => {
             (user) => user.id.substring(0,7) === userID
         );
         //Checking if user Exist or not.
-        if(!user) return console.log("Sorry user not found".red)
+        // if(!user) return console.log("Sorry user not found".red);
         console.table(user);
     } catch (error) {
         console.error(error)
@@ -74,7 +73,7 @@ const updateUser = async (userID, key, newValue) => {
         );
         
         //Checking if user Exist 
-        if (!user) return console.log("User not found".red);
+        // if (!user) return console.log("User not found".red);
         
         //Converting the first letter to Uppercase
         const value = newValue[0].toUpperCase() + newValue.slice(1);
@@ -115,7 +114,7 @@ const deleteUser = async (userID) => {
         });
         
         //Searching if the user exists or not
-        if(!user) return console.log("User not Found".red);
+        // if(!user) return console.log("User not Found".red);
 
         //Deleting and showing the user List
         const newData = db.data.Users.filter((user)=>{
@@ -129,10 +128,21 @@ const deleteUser = async (userID) => {
         console.error(error)
     }
 }
+//Cheking ID
+const check_id = async (userID) => {
+    //Acces data
+    const db = getConnection()
+    const user = db.data.Users.find(
+        (user) => user.id.substring(0,7) === userID
+    );
+    if(!user) return false
+    return true
+}
 export {
     createUser,
     getUsers,
     searchUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    check_id
 }

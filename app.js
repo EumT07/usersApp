@@ -13,7 +13,14 @@ import  {
 } from "./src/screens/screen.js"
 import util from "util"
 import {createConnectionLownDb} from "./src/database/database.js"
-import {createUser, deleteUser, getUsers, searchUser,updateUser}from "./src/controllers/users.ctrl.js";
+import {
+    createUser,
+    deleteUser,
+    getUsers,
+    searchUser,
+    updateUser,
+    check_id
+}from "./src/controllers/users.ctrl.js";
 import { loadingData_message, searchingData_message, errorMessage } from "./src/messages/msg.js";
 import events from "node:events";
 import { createFolder } from "./src/exports/export.js"
@@ -122,11 +129,22 @@ async function searching(){
     getUsers();
     await sleep(2000);
     const userID = await  cmdShell.question("Seach User By ID _> ".blue.bold);
-    console.clear();
-    searchingData_message(userID);
-    await sleep(12000);
-    console.clear();
-    edit_settings(userID);
+    const value = await check_id(userID);
+    await sleep(1000);
+    if(value){
+        console.clear();
+        searchingData_message(userID.green.bold);
+        await sleep(12000);
+        console.clear();
+        edit_settings(userID);  
+    }else{
+        console.clear();
+        console.log(`Ups.. Sorry`.yellow.bold);
+        console.log(`There is not any user with this ID: ${userID.yellow}`.red.bold);
+        await sleep(1000);
+        return searching(); 
+    }
+    
 }
 //Settings
 async function edit_settings(userID){

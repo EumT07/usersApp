@@ -18,7 +18,7 @@ async function loadingData_message(){
 }
 async function searchingData_message(userID){
     await sleep(1200);
-    console.log(`Wait few seconds we are looking for user with "${userID}" ID`.yellow.bold);
+    console.log(`Wait few seconds we are searching user with ID: `.yellow.bold,userID);
     await sleep(1500);
     console.clear()
     loadingData_message();
