@@ -6,8 +6,9 @@ const {color} = pkg;
 const menuS_text = {
     clipApp: " Clip UsersApp ".bgYellow.bold,
     choose: "Choose an Option:".blue.bold,
-    creatNewUser: "Creat User".green,
-    userList: "List Users".green,
+    creatNewUser: "Creat User".green.bold,
+    userList: "List Users".green.bold,
+    exportInfo: "Export text".green.bold,
     exit: "Exit".red.bold
 }
 const menu_screen = `
@@ -17,7 +18,8 @@ const menu_screen = `
            ${menuS_text.choose}
                 1) ${menuS_text.creatNewUser}
                 2) ${menuS_text.userList}
-                3) ${menuS_text.exit}
+                3) ${menuS_text.exportInfo}
+                4) ${menuS_text.exit}
         =========================\n${"_> : ".blue.bold}`;
 
 //Options screen

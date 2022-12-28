@@ -16,6 +16,7 @@ import {createConnectionLownDb} from "./src/database/database.js"
 import {createUser, deleteUser, getUsers, searchUser,updateUser}from "./src/controllers/users.ctrl.js";
 import { loadingData_message, searchingData_message, errorMessage } from "./src/messages/msg.js";
 import events from "node:events";
+import { createFolder } from "./src/exports/export.js"
 
 const sleep = util.promisify(setTimeout);
 events.defaultMaxListeners = 20
@@ -39,6 +40,9 @@ async function menuScren(){
             getUserList();
             break;
         case "3":
+            exportInfo();
+            break;
+        case "4":
             cmdShell.close();
             break;
         default:
@@ -100,6 +104,15 @@ async function getUserList(){
     }
     
 }
+//Export file
+async function exportInfo(){
+    await sleep(1000);
+    console.clear();
+    await createFolder();
+    await sleep(2000);
+    menuScren();
+}
+
 //Searching User by ID
 async function searching(){
     loadingData_message();
