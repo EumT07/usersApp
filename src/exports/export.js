@@ -18,7 +18,7 @@ async function createFolder(){
         const db = getConnection();
         const users = await db.data.Users;
         //File Content
-        let content = "Accounts :\n";
+        let content = "Contacts :\n";
         for (let i = 0; i < users.length; i++) {
             content += `
             =================== ${i + 1} ===================
@@ -35,7 +35,7 @@ async function createFolder(){
             fs.unlinkSync(`${desktopRoot}/${folder}/${file}`);
             //Adding a new info
             fs.appendFileSync(`${desktopRoot}/${folder}/${file}`, content);
-            console.log("The folder was Updated".green.bold);
+            console.log("The folder was Updated successfully".green.bold);
         }else{
             //Creating Folder
             fs.mkdirSync(`${desktopRoot}/${folder}`);

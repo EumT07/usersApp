@@ -68,11 +68,11 @@ const createScreen = `
         ===================\n
 `
 const searchUser_Screen = `
-========================================
-        ${"Type ID".green.bold}
-        ${"Copy ID (Select + crtl + c )".green.bold}
-        ${"Insert ID (click Right)".green.bold}
-========================================>
+=========================================
+        * ${"Type ID".green.bold}
+        * ${"Copy ID (Select + crtl + c )".green.bold}
+        * ${"Insert ID (click Right)".green.bold}
+=========================================>
 `
 const new_Name = `
         ====================

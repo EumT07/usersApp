@@ -50,6 +50,9 @@ async function menuScren(){
             exportInfo();
             break;
         case "4":
+            console.clear();
+            console.log("Thanks, good bye..!!".bgBlue.white.bold);
+            await sleep(1300);
             cmdShell.close();
             break;
         default:
@@ -62,7 +65,6 @@ async function menuScren(){
 }
 
 //Getting data from clients and creating users
-//* insert message info
 async function getUserInfo(){
     await sleep(1000);
     console.log(createScreen);
@@ -70,13 +72,13 @@ async function getUserInfo(){
         "Name _> : ".green.bold,
         "Last Name _> : ".green.bold,
         "Email _> : ".green.bold,
-        "Phone : ".green.bold
+        "Phone _> : ".green.bold
     ];
     const answers = [];
     let data = null;
     for(let i = 0; i < questions.length; i++){
         data = await cmdShell.question(questions[i]);
-        answers.push(data);
+        answers.push(data[0].toUpperCase() + data.slice(1));
     }
     loadingData_message();
     await sleep(5000);
@@ -100,6 +102,9 @@ async function getUserList(){
             menuScren();
             break;
         case ":exit":
+            console.clear();
+            console.log("Thanks, good bye..!!".bgBlue.white.bold);
+            await sleep(1300);
             cmdShell.close();
             break;
         default:
@@ -176,6 +181,9 @@ async function edit_settings(userID){
             console.clear();
             return menuScren();
         case ":exit":
+            console.clear();
+            console.log("Thanks, good bye..!!".bgBlue.white.bold);
+            await sleep(1300);
             cmdShell.close();
             break;
         default:

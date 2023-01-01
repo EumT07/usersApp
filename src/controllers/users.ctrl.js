@@ -27,7 +27,7 @@ const getUsers = async () =>{
 }
 //Creating a New user
 const createUser = async (answers) => {
-    const newUser = new User(answers[0],answers[1],answers[2],answers[3])
+    const newUser = new User(answers[0],answers[1],answers[2].toLowerCase(),answers[3])
     try{
         const db = getConnection();
         //Checking is user exists
@@ -130,13 +130,17 @@ const deleteUser = async (userID) => {
 }
 //Cheking ID
 const check_id = async (userID) => {
-    //Acces data
-    const db = getConnection()
-    const user = db.data.Users.find(
-        (user) => user.id.substring(0,7) === userID
-    );
-    if(!user) return false
-    return true
+    try {
+        //Acces data
+        const db = getConnection()
+        const user = db.data.Users.find(
+            (user) => user.id.substring(0,7) === userID
+        );
+        if(!user) return false
+        return true
+    } catch (error) {
+        console.error(error);
+    }
 }
 export {
     createUser,
